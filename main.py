@@ -8,7 +8,8 @@ from PySide2.QtWidgets import (
     QListWidget,
     QPushButton,
     QLineEdit,
-    QStatusBar
+    QStatusBar,
+    QListWidgetItem
 )
 
 
@@ -24,10 +25,6 @@ class MainWindow(QMainWindow):
         # 清单视图
         self.items_view = QListWidget()
         self.items_view.doubleClicked.connect(self.toggle_complete)
-        self.items_view.addItem('界面样式')
-        self.items_view.addItem('界面样式')
-        self.items_view.addItem('界面样式')
-        self.items_view.addItem('界面样式')
         layout.addWidget(self.items_view)
 
         # 按钮布局
@@ -86,6 +83,14 @@ class MainWindow(QMainWindow):
             }
         """)
 
+        self.items = [
+            {'name': '功能与设计', 'done': False},
+            {'name': '界面布局', 'done': False},
+            {'name': '界面样式', 'done': False},
+            {'name': '清单列表展示', 'done': False}
+        ]
+        self.list_items()
+
     @Slot()
     def add(self):
         print('add item')
@@ -101,6 +106,11 @@ class MainWindow(QMainWindow):
     @Slot()
     def toggle_complete(self):
         print('toggle complete ')
+
+    def list_items(self):
+        for item in self.items:
+            list_item = QListWidgetItem(item['name'])
+            self.items_view.addItem(list_item)
 
 
 app = QApplication([])
