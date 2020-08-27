@@ -22,6 +22,10 @@ class MainWindow(QMainWindow):
 
         # 清单视图
         self.items_view = QListWidget()
+        self.items_view.addItem('界面样式')
+        self.items_view.addItem('界面样式')
+        self.items_view.addItem('界面样式')
+        self.items_view.addItem('界面样式')
         layout.addWidget(self.items_view)
 
         # 按钮布局
@@ -51,8 +55,35 @@ class MainWindow(QMainWindow):
         container.setLayout(layout)
         self.setCentralWidget(container)
 
+        self.setStyleSheet("""
+            QListWidget {
+                border: 1px solid #999;
+                font-size: 13px;
+            }
+            
+            QListWidget::item {
+                color: #000;
+                height: 30px;
+                border-bottom: 1px solid #dedede;
+            }
+            QListWidget::item:selected {
+                background-color: #fff9dd;
+            }
+            
+            QPushButton {
+                height: 24px;
+                background-color: #fddb3a;
+                font-weight: 900;
+            }
+            
+            QLineEdit {
+                padding: 5px;
+            }
+        """)
+
 
 app = QApplication([])
+app.setStyle('Fusion')
 window = MainWindow()
 window.show()
 app.exec_()
