@@ -1,3 +1,4 @@
+from PySide2.QtCore import Slot
 from PySide2.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -22,6 +23,7 @@ class MainWindow(QMainWindow):
 
         # 清单视图
         self.items_view = QListWidget()
+        self.items_view.doubleClicked.connect(self.toggle_complete)
         self.items_view.addItem('界面样式')
         self.items_view.addItem('界面样式')
         self.items_view.addItem('界面样式')
@@ -34,10 +36,12 @@ class MainWindow(QMainWindow):
 
         # delete button
         self.delete_button = QPushButton('DELETE')
+        self.delete_button.clicked.connect(self.delete)
         button_layout.addWidget(self.delete_button)
 
         # Complete button
         self.complete_button = QPushButton('COMPLETE')
+        self.complete_button.clicked.connect(self.complete)
         button_layout.addWidget(self.complete_button)
 
         # add input
@@ -46,6 +50,7 @@ class MainWindow(QMainWindow):
 
         # add button
         self.add_button = QPushButton('ADD')
+        self.add_button.clicked.connect(self.add)
         layout.addWidget(self.add_button)
 
         # status bar
@@ -80,6 +85,22 @@ class MainWindow(QMainWindow):
                 padding: 5px;
             }
         """)
+
+    @Slot()
+    def add(self):
+        print('add item')
+
+    @Slot()
+    def delete(self):
+        print('delete item')
+
+    @Slot()
+    def complete(self):
+        print('complete item')
+
+    @Slot()
+    def toggle_complete(self):
+        print('toggle complete ')
 
 
 app = QApplication([])
