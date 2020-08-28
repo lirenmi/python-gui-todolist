@@ -43,6 +43,7 @@ class MainWindow(QMainWindow):
 
         # add input
         self.add_input = QLineEdit()
+        self.add_input.returnPressed.connect(self.add)
         layout.addWidget(self.add_input)
 
         # add button
@@ -93,7 +94,11 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def add(self):
-        print('add item')
+        name = self.add_input.text()
+        if name:
+            self.items_view.addItem(QListWidgetItem(name))
+            self.add_input.setText('')
+            print('add item')
 
     @Slot()
     def delete(self):
