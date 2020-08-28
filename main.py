@@ -1,4 +1,5 @@
-from PySide2.QtCore import Slot
+from PySide2.QtCore import Slot, QSize
+from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -24,6 +25,7 @@ class MainWindow(QMainWindow):
 
         # 清单视图
         self.items_view = QListWidget()
+        self.items_view.setIconSize(QSize(14, 14))
         self.items_view.doubleClicked.connect(self.toggle_complete)
         layout.addWidget(self.items_view)
 
@@ -86,7 +88,7 @@ class MainWindow(QMainWindow):
 
         self.items = [
             {'name': '功能与设计', 'done': False},
-            {'name': '界面布局', 'done': False},
+            {'name': '界面布局', 'done': True},
             {'name': '界面样式', 'done': False},
             {'name': '清单列表展示', 'done': False}
         ]
@@ -111,15 +113,35 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def complete(self):
-        print('complete item')
+        items = self.items_view.selectedItems()
+        if items:
+            item_data = self.items[self.items_view.currentRow()]
+            if not item_data['done']:
+                icon = QIcon('done.svg')
+                items[0].setIcon(icon)
+                item_data['done'] = True
+                print('complete item')
 
     @Slot()
     def toggle_complete(self):
-        print('toggle complete ')
+        items = self.items_view.selectedItems()
+        if items:
+            item_data = self.items[self.items_view.currentRow()]
+            if not item_data['done']:
+                icon = QIcon('done.svg')
+                items[0].setIcon(icon)
+                item_data['done'] = True
+            else:
+                icon = QIcon('')
+                items[0].setIcon(icon)
+                item_data['done'] = False
 
     def list_items(self):
         for item in self.items:
             list_item = QListWidgetItem(item['name'])
+            if item['done']:
+                icon = QIcon('done.svg')
+                list_item.setIcon(icon)
             self.items_view.addItem(list_item)
 
 
