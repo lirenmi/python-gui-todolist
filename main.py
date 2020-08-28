@@ -1,3 +1,4 @@
+import json
 from PySide2.QtCore import Slot, QSize
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import (
@@ -86,12 +87,8 @@ class MainWindow(QMainWindow):
             }
         """)
 
-        self.items = [
-            {'name': '功能与设计', 'done': False},
-            {'name': '界面布局', 'done': True},
-            {'name': '界面样式', 'done': False},
-            {'name': '清单列表展示', 'done': False}
-        ]
+        self.items = []
+        self.load()
         self.list_items()
 
     @Slot()
@@ -100,6 +97,8 @@ class MainWindow(QMainWindow):
         if name:
             self.items_view.addItem(QListWidgetItem(name))
             self.add_input.setText('')
+            self.items.append({'name': name, 'done': False})
+            self.save()
             print('add item')
 
     @Slot()
@@ -109,6 +108,7 @@ class MainWindow(QMainWindow):
             self.items.pop(self.items_view.currentRow())
             self.items_view.clear()
             self.list_items()
+            self.save()
         print('delete item')
 
     @Slot()
@@ -121,6 +121,7 @@ class MainWindow(QMainWindow):
                 items[0].setIcon(icon)
                 item_data['done'] = True
                 print('complete item')
+                self.save()
 
     @Slot()
     def toggle_complete(self):
@@ -135,6 +136,7 @@ class MainWindow(QMainWindow):
                 icon = QIcon('')
                 items[0].setIcon(icon)
                 item_data['done'] = False
+            self.save()
 
     def list_items(self):
         for item in self.items:
@@ -143,6 +145,14 @@ class MainWindow(QMainWindow):
                 icon = QIcon('done.svg')
                 list_item.setIcon(icon)
             self.items_view.addItem(list_item)
+
+    def load(self):
+        with open('data.json', 'r') as f:
+            self.items = json.load(f)
+
+    def save(self):
+        with open('data.json', 'w') as f:
+            json.dump(self.items, f)
 
 
 app = QApplication([])
