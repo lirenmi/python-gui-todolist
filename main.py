@@ -102,6 +102,11 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def delete(self):
+        items = self.items_view.selectedItems()
+        if items:
+            self.items.pop(self.items_view.currentRow())
+            self.items_view.clear()
+            self.list_items()
         print('delete item')
 
     @Slot()
