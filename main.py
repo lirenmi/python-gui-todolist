@@ -1,4 +1,5 @@
 import json
+import db
 from PySide2.QtCore import Slot, QSize
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import (
@@ -98,18 +99,18 @@ class MainWindow(QMainWindow):
             self.items_view.addItem(QListWidgetItem(name))
             self.add_input.setText('')
             self.items.append({'name': name, 'done': False})
-            self.save()
-            print('add item')
+            # self.save()
+            db.save(name, False)
 
     @Slot()
     def delete(self):
         items = self.items_view.selectedItems()
         if items:
             self.items.pop(self.items_view.currentRow())
+            db.delete(self.items_view.currentRow()+1)
             self.items_view.clear()
             self.list_items()
-            self.save()
-        print('delete item')
+            # self.save()
 
     @Slot()
     def complete(self):
@@ -120,8 +121,8 @@ class MainWindow(QMainWindow):
                 icon = QIcon('done.svg')
                 items[0].setIcon(icon)
                 item_data['done'] = True
-                print('complete item')
-                self.save()
+                # self.save()
+                db.update(True, self.items_view.currentRow()+1)
 
     @Slot()
     def toggle_complete(self):
@@ -132,11 +133,13 @@ class MainWindow(QMainWindow):
                 icon = QIcon('done.svg')
                 items[0].setIcon(icon)
                 item_data['done'] = True
+                db.update(True, self.items_view.currentRow() + 1)
             else:
                 icon = QIcon('')
                 items[0].setIcon(icon)
                 item_data['done'] = False
-            self.save()
+                db.update(False, self.items_view.currentRow() + 1)
+            # self.save()
 
     def list_items(self):
         for item in self.items:
@@ -147,8 +150,9 @@ class MainWindow(QMainWindow):
             self.items_view.addItem(list_item)
 
     def load(self):
-        with open('data.json', 'r') as f:
-            self.items = json.load(f)
+        # with open('data.json', 'r') as f:
+        #     self.items = json.load(f)
+        self.items = db.select()
 
     def save(self):
         with open('data.json', 'w') as f:
